@@ -1,0 +1,8 @@
+[package]
+name = "subxt-generated"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+subxt = { git = "https://github.com/paritytech/subxt.git", branch = "master" }
+codec = { version = "3.0.0", package = "parity-scale-codec" }
