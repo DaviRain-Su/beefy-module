@@ -1,4 +1,4 @@
-##  beefy module
+##  beefy module(substrate polkadot-v0.9.37)
 
 This is the concrete implementation of the centauri bridging protocol, based on IBC, Powered by light clients.
 
