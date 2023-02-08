@@ -56,6 +56,7 @@ use crate::{
 use helpers::{prove_authority_set, AuthorityProofWithSignatures};
 use relay_chain_queries::{fetch_finalized_parachain_heads, fetch_mmr_proof, FinalizedParaHeads};
 
+/// assosite block bumber type
 pub type BlockNumberOf<T> = <<T as subxt::Config>::Header as subxt::config::Header>::Number;
 
 /// Host function implementation for beefy light client.
@@ -175,7 +176,7 @@ where
 	) -> Result<Vec<T::Header>, Error>
 	where
 		u32: From<BlockNumberOf<T>>,
-		// T::BlockNumber: From<u32>,
+		BlockNumberOf<T>: From<u32>,
 	{
 		let subxt_block_number: subxt::rpc::types::BlockNumber = commitment_block_number.into();
 		let block_hash = self.relay_client.rpc().block_hash(Some(subxt_block_number)).await?;
@@ -224,7 +225,9 @@ where
 				.await?
 				.expect("Header exists in its own changeset; qed");
 
-			let para_header = T::Header::decode(&mut &head.0[..])
+			// let para_header = T::Header::decode(&mut &head.0[..])
+				// .map_err(|_| Error::Custom(format!("Failed to decode header")))?;
+				let para_header: T::Header = serde_json::from_slice(&head.0)
 				.map_err(|_| Error::Custom(format!("Failed to decode header")))?;
 			headers.push(para_header);
 		}
@@ -280,7 +283,8 @@ where
 				heads_total_count,
 			} = prove_parachain_headers(&para_headers, self.para_id)?;
 
-			let decoded_para_head = T::Header::decode(&mut &para_head[..])?;
+			let decoded_para_head: T::Header = serde_json::from_slice(&para_head[..])
+				.map_err(|_| Error::Custom(format!("Failed to decode header")))?;
 			let TimeStampExtWithProof { ext: timestamp_extrinsic, proof: extrinsic_proof } =
 				fetch_timestamp_extrinsic_with_proof(
 					&self.para_client,

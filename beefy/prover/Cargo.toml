@@ -34,7 +34,7 @@ jsonrpsee-core = { version = "0.16.2", features = ["async-client"] }
 subxt = { git = "https://github.com/paritytech/subxt.git", branch = "master" }
 hex-literal = { version = "0.3.4" }
 serde_json = { version = "1.0.74" }
-# pallet-mmr-rpc = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
+mmr-rpc = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
 sp-trie = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
 hex = { version = "0.4.3" }
 beefy-light-client-primitives = {  path = "../primitives" }

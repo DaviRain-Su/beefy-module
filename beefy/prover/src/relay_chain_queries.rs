@@ -19,7 +19,7 @@ use crate::{
 };
 use sp_beefy::{SignedCommitment, VersionedFinalityProof};
 use codec::{Decode, Encode};
-use pallet_mmr::LeavesProof;
+use mmr_rpc::LeavesProof;
 use sp_core::{hexdisplay::AsBytesRef, storage::StorageKey, H256};
 use sp_runtime::traits::Zero;
 use std::collections::{BTreeMap, BTreeSet};
@@ -121,7 +121,7 @@ where
 			}
 		}
 
-		let para_header: T::Header = Decode::decode(&mut &heads[&para_id][..])
+		let para_header: T::Header = serde_json::from_slice(&heads[&para_id][..])
 			.map_err(|_| Error::Custom(format!("Failed to decode header for {para_id}")))?;
 		let para_block_number = para_header.number();
 		// skip genesis header or any unknown headers
