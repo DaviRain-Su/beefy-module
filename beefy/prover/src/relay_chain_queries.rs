@@ -16,15 +16,15 @@
 use super::runtime;
 use crate::{
 	error::Error, runtime::api::runtime_types::polkadot_runtime_parachains::paras::ParaLifecycle,
+	BlockNumberOf,
 };
-use sp_beefy::{SignedCommitment, VersionedFinalityProof};
 use codec::{Decode, Encode};
 use mmr_rpc::LeavesProof;
+use sp_beefy::{SignedCommitment, VersionedFinalityProof};
 use sp_core::{hexdisplay::AsBytesRef, storage::StorageKey, H256};
 use sp_runtime::traits::Zero;
 use std::collections::{BTreeMap, BTreeSet};
 use subxt::{config::Header, rpc::rpc_params, Config, OnlineClient};
-use crate::BlockNumberOf;
 
 /// This contains the leaf indices of the relay chain blocks and a map of relay chain heights to a
 /// map of all parachain headers at those heights Used for generating [`ParaHeadsProof`]
@@ -34,7 +34,6 @@ pub struct FinalizedParaHeads {
 	/// Map of relay chain heights to map of para ids and parachain headers SCALE-encoded
 	pub raw_finalized_heads: BTreeMap<u64, BTreeMap<u32, Vec<u8>>>,
 }
-
 
 /// Get the raw parachain heads finalized in the provided block
 pub async fn fetch_finalized_parachain_heads<T: Config>(

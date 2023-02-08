@@ -31,10 +31,6 @@ use beefy_light_client_primitives::{
 	ClientState, HostFunctions, MerkleHasher, MmrUpdateProof, ParachainHeader, PartialMmrLeaf,
 	SignedCommitment,
 };
-use sp_beefy::{
-	known_payloads::MMR_ROOT_ID,
-	mmr::{BeefyNextAuthoritySet, MmrLeaf},
-};
 use codec::{Decode, Encode};
 use error::Error;
 use helpers::{
@@ -44,6 +40,10 @@ use helpers::{
 use hex_literal::hex;
 use pallet_mmr_primitives::Proof;
 use relay_chain_queries::fetch_beefy_justification;
+use sp_beefy::{
+	known_payloads::MMR_ROOT_ID,
+	mmr::{BeefyNextAuthoritySet, MmrLeaf},
+};
 use sp_core::{hexdisplay::AsBytesRef, keccak_256, H256};
 use sp_io::crypto;
 use sp_runtime::traits::BlakeTwo256;
@@ -226,8 +226,8 @@ where
 				.expect("Header exists in its own changeset; qed");
 
 			// let para_header = T::Header::decode(&mut &head.0[..])
-				// .map_err(|_| Error::Custom(format!("Failed to decode header")))?;
-				let para_header: T::Header = serde_json::from_slice(&head.0)
+			// .map_err(|_| Error::Custom(format!("Failed to decode header")))?;
+			let para_header: T::Header = serde_json::from_slice(&head.0)
 				.map_err(|_| Error::Custom(format!("Failed to decode header")))?;
 			headers.push(para_header);
 		}
@@ -318,10 +318,7 @@ where
 	/// mmr root hash.
 	pub async fn fetch_mmr_update_proof_for(
 		&self,
-		signed_commitment: sp_beefy::SignedCommitment<
-			u32,
-			sp_beefy::crypto::Signature,
-		>,
+		signed_commitment: sp_beefy::SignedCommitment<u32, sp_beefy::crypto::Signature>,
 	) -> Result<MmrUpdateProof, Error> {
 		let subxt_block_number: subxt::rpc::types::BlockNumber =
 			signed_commitment.commitment.block_number.into();

@@ -27,9 +27,9 @@ use beefy_light_client_primitives::{
 	error::BeefyClientError, BeefyNextAuthoritySet, ClientState, HostFunctions, MerkleHasher,
 	MmrUpdateProof, NodesUtils, ParachainsUpdateProof, SignatureWithAuthorityIndex, HASH_LENGTH,
 };
-use sp_beefy::{known_payloads::MMR_ROOT_ID, mmr::MmrLeaf};
 use codec::{Decode, Encode};
 use frame_support::sp_runtime::{app_crypto::ByteArray, traits::Convert};
+use sp_beefy::{known_payloads::MMR_ROOT_ID, mmr::MmrLeaf};
 use sp_core::H256;
 
 use alloc::{format, string::ToString};

@@ -152,10 +152,7 @@ pub fn prove_parachain_headers(
 
 /// Get the proof for authority set that signed this commitment
 pub fn prove_authority_set(
-	signed_commitment: &sp_beefy::SignedCommitment<
-		u32,
-		sp_beefy::crypto::Signature,
-	>,
+	signed_commitment: &sp_beefy::SignedCommitment<u32, sp_beefy::crypto::Signature>,
 	authority_address_hashes: Vec<[u8; 32]>,
 ) -> Result<AuthorityProofWithSignatures, Error> {
 	let signatures = signed_commitment
