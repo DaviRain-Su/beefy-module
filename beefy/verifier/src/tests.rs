@@ -17,7 +17,7 @@ use beefy_light_client_primitives::{
 	error::BeefyClientError, EncodedVersionedFinalityProof, MmrUpdateProof, ParachainsUpdateProof,
 	SignatureWithAuthorityIndex, SignedCommitment,
 };
-use beefy_primitives::{
+use sp_beefy::{
 	known_payloads::MMR_ROOT_ID,
 	mmr::{BeefyNextAuthoritySet, MmrLeaf},
 	Payload, VersionedFinalityProof,
@@ -37,8 +37,8 @@ async fn test_verify_mmr_with_proof() {
 	let relay = std::env::var("RELAY_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
 	let para = std::env::var("PARA_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
 
-	let relay_ws_url = format!("ws://{relay}:9944");
-	let para_ws_url = format!("ws://{para}:9188");
+	let relay_ws_url = format!("{relay}:443");
+	let para_ws_url = format!("{para}:443");
 
 	let client = subxt::client::OnlineClient::<PolkadotConfig>::from_url(relay_ws_url)
 		.await
@@ -68,7 +68,7 @@ async fn test_verify_mmr_with_proof() {
 	{
 		let beefy_version_finality_proof: VersionedFinalityProof<
 			u32,
-			beefy_primitives::crypto::Signature,
+			sp_beefy::crypto::Signature,
 		> = codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
 
 		let signed_commitment = match beefy_version_finality_proof {
@@ -122,7 +122,7 @@ async fn test_verify_mmr_with_proof() {
 async fn should_fail_with_incomplete_signature_threshold() {
 	let mmr_update = MmrUpdateProof {
 		signed_commitment: SignedCommitment {
-			commitment: beefy_primitives::Commitment {
+			commitment: sp_beefy::Commitment {
 				payload: Payload::from_single_entry(MMR_ROOT_ID, vec![0u8; 32]),
 				block_number: Default::default(),
 				validator_set_id: 3,
@@ -163,7 +163,7 @@ async fn should_fail_with_incomplete_signature_threshold() {
 async fn should_fail_with_invalid_validator_set_id() {
 	let mmr_update = MmrUpdateProof {
 		signed_commitment: SignedCommitment {
-			commitment: beefy_primitives::Commitment {
+			commitment: sp_beefy::Commitment {
 				payload: Payload::from_single_entry(MMR_ROOT_ID, vec![0u8; 32]),
 				block_number: Default::default(),
 				validator_set_id: 3,
@@ -245,7 +245,7 @@ async fn verify_parachain_headers() {
 	{
 		let beefy_version_finality_proof: VersionedFinalityProof<
 			u32,
-			beefy_primitives::crypto::Signature,
+			sp_beefy::crypto::Signature,
 		> = codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
 
 		let signed_commitment = match beefy_version_finality_proof {
