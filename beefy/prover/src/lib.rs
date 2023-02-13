@@ -40,7 +40,7 @@ use helpers::{
 use hex_literal::hex;
 use pallet_mmr_primitives::Proof;
 use relay_chain_queries::fetch_beefy_justification;
-use sp_beefy::{
+use beefy_primitives::{
 	known_payloads::MMR_ROOT_ID,
 	mmr::{BeefyNextAuthoritySet, MmrLeaf},
 };
@@ -318,7 +318,7 @@ where
 	/// mmr root hash.
 	pub async fn fetch_mmr_update_proof_for(
 		&self,
-		signed_commitment: sp_beefy::SignedCommitment<u32, sp_beefy::crypto::Signature>,
+		signed_commitment: beefy_primitives::SignedCommitment<u32, beefy_primitives::crypto::Signature>,
 	) -> Result<MmrUpdateProof, Error> {
 		let subxt_block_number: subxt::rpc::types::BlockNumber =
 			signed_commitment.commitment.block_number.into();

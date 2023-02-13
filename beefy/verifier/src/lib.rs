@@ -29,7 +29,7 @@ use beefy_light_client_primitives::{
 };
 use codec::{Decode, Encode};
 use frame_support::sp_runtime::{app_crypto::ByteArray, traits::Convert};
-use sp_beefy::{known_payloads::MMR_ROOT_ID, mmr::MmrLeaf};
+use beefy_primitives::{known_payloads::MMR_ROOT_ID, mmr::MmrLeaf};
 use sp_core::H256;
 
 use alloc::{format, string::ToString};
@@ -98,7 +98,7 @@ where
 		.map(|SignatureWithAuthorityIndex { index, signature }| {
 			H::secp256k1_ecdsa_recover_compressed(&signature, &commitment_hash)
 				.and_then(|public_key_bytes| {
-					sp_beefy::crypto::AuthorityId::from_slice(&public_key_bytes).ok()
+					beefy_primitives::crypto::AuthorityId::from_slice(&public_key_bytes).ok()
 				})
 				.map(|pub_key| {
 					authority_indices.push(index as usize);

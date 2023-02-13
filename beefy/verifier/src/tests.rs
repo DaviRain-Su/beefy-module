@@ -17,7 +17,7 @@ use beefy_light_client_primitives::{
 	error::BeefyClientError, EncodedVersionedFinalityProof, MmrUpdateProof, ParachainsUpdateProof,
 	SignatureWithAuthorityIndex, SignedCommitment,
 };
-use sp_beefy::{
+use beefy_primitives::{
 	known_payloads::MMR_ROOT_ID,
 	mmr::{BeefyNextAuthoritySet, MmrLeaf},
 	Payload, VersionedFinalityProof,
@@ -68,7 +68,7 @@ async fn test_verify_mmr_with_proof() {
 	{
 		let beefy_version_finality_proof: VersionedFinalityProof<
 			u32,
-			sp_beefy::crypto::Signature,
+			beefy_primitives::crypto::Signature,
 		> = codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
 
 		let signed_commitment = match beefy_version_finality_proof {
@@ -122,7 +122,7 @@ async fn test_verify_mmr_with_proof() {
 async fn should_fail_with_incomplete_signature_threshold() {
 	let mmr_update = MmrUpdateProof {
 		signed_commitment: SignedCommitment {
-			commitment: sp_beefy::Commitment {
+			commitment: beefy_primitives::Commitment {
 				payload: Payload::from_single_entry(MMR_ROOT_ID, vec![0u8; 32]),
 				block_number: Default::default(),
 				validator_set_id: 3,
@@ -163,7 +163,7 @@ async fn should_fail_with_incomplete_signature_threshold() {
 async fn should_fail_with_invalid_validator_set_id() {
 	let mmr_update = MmrUpdateProof {
 		signed_commitment: SignedCommitment {
-			commitment: sp_beefy::Commitment {
+			commitment: beefy_primitives::Commitment {
 				payload: Payload::from_single_entry(MMR_ROOT_ID, vec![0u8; 32]),
 				block_number: Default::default(),
 				validator_set_id: 3,
@@ -245,7 +245,7 @@ async fn verify_parachain_headers() {
 	{
 		let beefy_version_finality_proof: VersionedFinalityProof<
 			u32,
-			sp_beefy::crypto::Signature,
+			beefy_primitives::crypto::Signature,
 		> = codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
 
 		let signed_commitment = match beefy_version_finality_proof {

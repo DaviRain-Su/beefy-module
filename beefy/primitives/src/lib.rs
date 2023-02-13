@@ -22,8 +22,8 @@
 pub mod error;
 use codec::{Decode, Encode};
 use core::marker::PhantomData;
-use sp_beefy::mmr::MmrLeafVersion;
-pub use sp_beefy::mmr::{BeefyNextAuthoritySet, MmrLeaf};
+use beefy_primitives::mmr::MmrLeafVersion;
+pub use beefy_primitives::mmr::{BeefyNextAuthoritySet, MmrLeaf};
 use sp_core::H256;
 use sp_std::prelude::*;
 
@@ -72,7 +72,7 @@ pub struct SignatureWithAuthorityIndex {
 /// Signed commitment
 pub struct SignedCommitment {
 	/// Commitment
-	pub commitment: sp_beefy::Commitment<u32>,
+	pub commitment: beefy_primitives::Commitment<u32>,
 	/// Signatures for this commitment
 	pub signatures: Vec<SignatureWithAuthorityIndex>,
 }

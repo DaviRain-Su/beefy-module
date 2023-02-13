@@ -152,7 +152,7 @@ pub fn prove_parachain_headers(
 
 /// Get the proof for authority set that signed this commitment
 pub fn prove_authority_set(
-	signed_commitment: &sp_beefy::SignedCommitment<u32, sp_beefy::crypto::Signature>,
+	signed_commitment: &beefy_primitives::SignedCommitment<u32, beefy_primitives::crypto::Signature>,
 	authority_address_hashes: Vec<[u8; 32]>,
 ) -> Result<AuthorityProofWithSignatures, Error> {
 	let signatures = signed_commitment
@@ -192,7 +192,7 @@ pub fn hash_authority_addresses(encoded_public_keys: Vec<Vec<u8>>) -> Result<Vec
 	let authority_address_hashes = encoded_public_keys
 		.into_iter()
 		.map(|x| {
-			sp_beefy::crypto::AuthorityId::decode(&mut &*x)
+			beefy_primitives::crypto::AuthorityId::decode(&mut &*x)
 				.map(|id| keccak_256(&beefy_mmr::BeefyEcdsaToEthereum::convert(id)))
 		})
 		.collect::<Result<Vec<_>, codec::Error>>()?;

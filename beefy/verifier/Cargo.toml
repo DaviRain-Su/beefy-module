@@ -15,16 +15,16 @@ mmr-lib= { package = "ckb-merkle-mountain-range", version = "0.3.2", default-fea
 derive_more = { version = "0.99.17", default-features = false, features = ["from"]  }
 
 # substrate
-sp-std = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
-sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false}
-sp-core = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false}
-sp-core-hashing = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false}
-frame-support = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
-beefy-mmr = { package = "pallet-beefy-mmr", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
-pallet-mmr = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
-pallet-mmr-primitives = { package = "sp-mmr-primitives", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
-sp-beefy = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
-sp-trie = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false }
+sp-std = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
+sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false}
+sp-core = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false}
+sp-core-hashing = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false}
+frame-support = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
+beefy-mmr = { package = "pallet-beefy-mmr", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
+pallet-mmr = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
+pallet-mmr-primitives = { package = "sp-mmr-primitives", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
+beefy-primitives = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
+sp-trie = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false }
 
 # local
 beefy-light-client-primitives = { path = "../primitives", default-features = false }
@@ -35,14 +35,14 @@ tokio = { version = "1.17.0", features = ["full"] }
 subxt = { git = "https://github.com/paritytech/subxt.git", branch = "master" }
 hex-literal = "0.3.4"
 serde_json = "1.0.74"
-mmr-rpc = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
-frame-support = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
-sp-io = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
-sp-trie = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37" }
+pallet-mmr-rpc  = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33" }
+frame-support = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33" }
+sp-io = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33" }
+sp-trie = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33" }
 beefy-prover = { path = "../prover", features = ["build-metadata-from-ws"] }
 hex = "0.4.3"
 futures = "0.3.21"
-beefy-gadget = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.37", default-features = false}
+beefy-gadget = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.33", default-features = false}
 
 
 [features]
@@ -56,7 +56,7 @@ std = [
     "sp-core/std",
     "sp-io/std",
     "beefy-mmr/std",
-    "sp-beefy/std",
+    "beefy-primitives/std",
     "pallet-mmr/std",
     "pallet-mmr-primitives/std",
     "rs_merkle/std",

@@ -19,8 +19,8 @@ use crate::{
 	BlockNumberOf,
 };
 use codec::{Decode, Encode};
-use mmr_rpc::LeavesProof;
-use sp_beefy::{SignedCommitment, VersionedFinalityProof};
+use pallet_mmr_rpc::LeavesProof;
+use beefy_primitives::{SignedCommitment, VersionedFinalityProof};
 use sp_core::{hexdisplay::AsBytesRef, storage::StorageKey, H256};
 use sp_runtime::traits::Zero;
 use std::collections::{BTreeMap, BTreeSet};
@@ -139,7 +139,7 @@ where
 /// Get beefy justification for latest finalized beefy block
 pub async fn fetch_beefy_justification<T: Config>(
 	client: &OnlineClient<T>,
-) -> Result<(SignedCommitment<u32, sp_beefy::crypto::Signature>, T::Hash), Error> {
+) -> Result<(SignedCommitment<u32, beefy_primitives::crypto::Signature>, T::Hash), Error> {
 	let latest_beefy_finalized: <T as Config>::Hash =
 		client.rpc().request("beefy_getFinalizedHead", rpc_params!()).await?;
 	let block = client
@@ -155,12 +155,12 @@ pub async fn fetch_beefy_justification<T: Config>(
 	let beefy_justification = justifications
 		.into_iter()
 		.find_map(|justfication| {
-			(justfication.0 == sp_beefy::BEEFY_ENGINE_ID).then(|| justfication.1)
+			(justfication.0 == beefy_primitives::BEEFY_ENGINE_ID).then(|| justfication.1)
 		})
 		.expect("Should have valid beefy justification");
 	let VersionedFinalityProof::V1(signed_commitment) = VersionedFinalityProof::<
 		u32,
-		sp_beefy::crypto::Signature,
+		beefy_primitives::crypto::Signature,
 	>::decode(&mut &*beefy_justification)
 	.expect("Beefy justification should decode correctly");
 
