@@ -17,14 +17,14 @@ use beefy_light_client_primitives::{
 	error::BeefyClientError, EncodedVersionedFinalityProof, MmrUpdateProof, ParachainsUpdateProof,
 	SignatureWithAuthorityIndex, SignedCommitment,
 };
+use beefy_prover::{Crypto, Prover};
+use futures::stream::StreamExt;
+use pallet_mmr_primitives::Proof;
 use sp_beefy::{
 	known_payloads::MMR_ROOT_ID,
 	mmr::{BeefyNextAuthoritySet, MmrLeaf},
 	Payload, VersionedFinalityProof,
 };
-use beefy_prover::{Crypto, Prover};
-use futures::stream::StreamExt;
-use pallet_mmr_primitives::Proof;
 use sp_core::bytes::to_hex;
 use subxt::{
 	rpc::{rpc_params, Subscription},
@@ -32,13 +32,18 @@ use subxt::{
 };
 
 #[tokio::test]
-#[ignore]
+// #[ignore]
 async fn test_verify_mmr_with_proof() {
-	let relay = std::env::var("RELAY_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-	let para = std::env::var("PARA_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-
-	let relay_ws_url = format!("{relay}:443");
-	let para_ws_url = format!("{para}:443");
+	let relay_ws_url = if let Ok(ip) = std::env::var("RELAY_HOST") {
+		format!("{}:443", ip)
+	} else {
+		"ws://127.0.0.1:9944".to_string()
+	};
+	let para_ws_url = if let Ok(ip) = std::env::var("RELAY_HOST") {
+		format!("{}:443", ip)
+	} else {
+		"ws://127.0.0.1:59847".to_string()
+	};
 
 	let client = subxt::client::OnlineClient::<PolkadotConfig>::from_url(relay_ws_url)
 		.await
@@ -66,10 +71,8 @@ async fn test_verify_mmr_with_proof() {
 	let mut subscription_stream = subscription.enumerate().take(100);
 	while let Some((count, Ok(encoded_versioned_finality_proof))) = subscription_stream.next().await
 	{
-		let beefy_version_finality_proof: VersionedFinalityProof<
-			u32,
-			sp_beefy::crypto::Signature,
-		> = codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
+		let beefy_version_finality_proof: VersionedFinalityProof<u32, sp_beefy::crypto::Signature> =
+			codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
 
 		let signed_commitment = match beefy_version_finality_proof {
 			VersionedFinalityProof::V1(commitment) => commitment,
@@ -208,13 +211,18 @@ async fn should_fail_with_invalid_validator_set_id() {
 }
 
 #[tokio::test]
-#[ignore]
+// #[ignore]
 async fn verify_parachain_headers() {
-	let relay = std::env::var("RELAY_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-	let para = std::env::var("PARA_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-
-	let relay_ws_url = format!("ws://{relay}:9944");
-	let para_ws_url = format!("ws://{para}:9188");
+	let relay_ws_url = if let Ok(ip) = std::env::var("RELAY_HOST") {
+		format!("{}:443", ip)
+	} else {
+		"ws://127.0.0.1:9944".to_string()
+	};
+	let para_ws_url = if let Ok(ip) = std::env::var("RELAY_HOST") {
+		format!("{}:443", ip)
+	} else {
+		"ws://127.0.0.1:59847".to_string()
+	};
 
 	let client = subxt::client::OnlineClient::<PolkadotConfig>::from_url(relay_ws_url)
 		.await
@@ -243,10 +251,8 @@ async fn verify_parachain_headers() {
 	let mut subscription_stream = subscription.enumerate().take(100);
 	while let Some((count, Ok(encoded_versioned_finality_proof))) = subscription_stream.next().await
 	{
-		let beefy_version_finality_proof: VersionedFinalityProof<
-			u32,
-			sp_beefy::crypto::Signature,
-		> = codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
+		let beefy_version_finality_proof: VersionedFinalityProof<u32, sp_beefy::crypto::Signature> =
+			codec::Decode::decode(&mut &*encoded_versioned_finality_proof.0 .0).unwrap();
 
 		let signed_commitment = match beefy_version_finality_proof {
 			VersionedFinalityProof::V1(commitment) => commitment,

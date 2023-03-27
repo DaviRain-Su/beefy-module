@@ -227,8 +227,9 @@ where
 
 			// let para_header = T::Header::decode(&mut &head.0[..])
 			// .map_err(|_| Error::Custom(format!("Failed to decode header")))?;
-			let para_header: T::Header = serde_json::from_slice(&head.0)
-				.map_err(|_| Error::Custom(format!("Failed to decode header")))?;
+			let para_header: T::Header = serde_json::from_slice(&head.0).map_err(|e| {
+				Error::Custom(format!("Failed to decode header: {}", e.to_string()))
+			})?;
 			headers.push(para_header);
 		}
 

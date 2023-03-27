@@ -16,8 +16,11 @@
 use once_cell::sync::Lazy;
 
 static RELAY_URL: Lazy<String> = Lazy::new(|| {
-	let ip = std::env::var("RELAY_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-	format!("{}:443", ip)
+	if let Ok(ip) = std::env::var("RELAY_HOST") {
+		format!("{}:443", ip)
+	} else {
+		"ws://127.0.0.1:9944".to_string()
+	}
 });
 
 #[tokio::main]
